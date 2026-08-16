@@ -117,7 +117,7 @@ button{ font:inherit; }
 
 /* ---------- TYPOGRAPHIE ---------- */
 h1,h2,h3{ line-height:1.12; letter-spacing:-0.025em; margin:0 0 .5em; font-weight:800; color:#f4f7fb; }
-h1{ font-size:clamp(2.2rem, 5.2vw, 3.9rem); }
+h1{ font-size:clamp(2rem, 4.4vw, 3.3rem); text-wrap:balance; } /* massif sans être écrasant, lignes équilibrées */
 .metal-text{
   background:linear-gradient(120deg,#2a63c9 0%,#6ba0f5 45%,#1a3f8f 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -184,10 +184,14 @@ section:not(.sec--dark){
   -webkit-backdrop-filter:blur(12px);
   border-bottom:1px solid #1d2a41;
 }
+/* l'en-tête dispose de plus de large que le contenu : la nav trilingue
+   (le français est la plus longue) + langues + CTA tiennent sans se rogner */
+.site-header .wrap{ max-width:1400px; }
 .header-bar{
   display:flex; align-items:center; gap:26px;
   min-height:70px;
 }
+.header-bar > .btn--soon{ flex:none; } /* le CTA ne se compresse jamais */
 .brand{
   display:flex; align-items:center; gap:12px;
   text-decoration:none; font-weight:800; letter-spacing:-0.02em;
@@ -196,7 +200,7 @@ section:not(.sec--dark){
 .brand{ color:#f2f6fb; }
 .brand .brand-pro{ color:var(--slate-4); font-weight:600; }
 
-.main-nav{ display:flex; gap:4px; }
+.main-nav{ display:flex; gap:4px; flex-wrap:wrap; }
 .main-nav a{
   text-decoration:none; font-size:.94rem; font-weight:600;
   color:var(--slate-4); padding:8px 12px; border-radius:6px;
@@ -213,7 +217,8 @@ section:not(.sec--dark){
 
 /* Sélecteur de langue */
 .lang-switch{
-  display:flex; border:1px solid #26344e; border-radius:8px;
+  display:flex; flex:none; /* jamais compressé : les 3 langues restent visibles */
+  border:1px solid #26344e; border-radius:8px;
   overflow:hidden; background:rgba(20,27,42,.72);
 }
 .lang-switch button{
@@ -322,7 +327,18 @@ section:not(.sec--dark){
   content:""; position:absolute; left:2px; bottom:0;
   width:96px; height:4px; border-radius:2px; background:var(--metal);
 }
-.hero-copy .btn-row{ display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-top:2em; }
+/* pastilles des modalités d'imagerie : lecture en un coup d'œil */
+.hero-mods{
+  list-style:none; display:flex; flex-wrap:wrap; gap:8px;
+  padding:0; margin:1.5em 0 0;
+}
+.hero-mods li{
+  font-family:var(--font-mono); font-size:.68rem; letter-spacing:.14em;
+  text-transform:uppercase; color:#b9c9e2;
+  border:1px solid var(--slate-3); border-radius:99px;
+  padding:5px 13px; background:rgba(95,155,248,.08);
+}
+.hero-copy .btn-row{ display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-top:1.8em; }
 .hero-note{
   font-size:.9rem; color:var(--slate-4); margin-top:1.1em;
   font-family:var(--font-mono);
@@ -347,7 +363,7 @@ section:not(.sec--dark){
 .mv text{ font-family:var(--font-mono); }
 .mv .mv-frame-label{ fill:#7f92b0; font-size:11px; letter-spacing:.18em; }
 /* fiche d'examen : reprend l'interface sombre du logiciel */
-.mv .mv-app{ fill:#151b28; stroke:#2b3550; stroke-width:1.5; }
+.mv .mv-app{ fill:#151b28; stroke:#34426a; stroke-width:1.5; }
 .mv .mv-title{ fill:#8fa3c4; font-size:11.5px; letter-spacing:.2em; }
 .mv .mv-line{ fill:#273350; }
 .mv .mv-line-strong{ fill:#3d4c72; }
@@ -356,11 +372,16 @@ section:not(.sec--dark){
                stroke-linecap:round; stroke-linejoin:round; }
 .mv .mv-row-on .mv-box{ stroke:#5f9bf8; }
 .mv .mv-live{ fill:#5f9bf8; }
+/* le témoin LIVE respire en continu (opacité seule, coupé en reduced-motion) */
+@media (prefers-reduced-motion: no-preference){
+  html.js .mv .mv-live{ animation:mv-pulse 1.6s ease-in-out infinite; }
+}
+@keyframes mv-pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
 /* document Word généré : page claire */
 .mv .mv-card{ fill:#f7fafd; stroke:var(--slate-1); stroke-width:1.5; }
 .mv .mv-scan-line{ stroke:#1a6ef5; stroke-width:2.5; }
 .mv .mv-scan-glow{ stroke:#1a6ef5; stroke-width:9; opacity:.2; }
-.mv .mv-wave{ stroke:var(--accent); stroke-width:2; fill:none; opacity:0; }
+.mv .mv-wave{ stroke:var(--accent); stroke-width:2.4; fill:none; opacity:0; }
 .mv .mv-doc-line{ fill:#d7e0ec; }
 .mv .mv-doc-line--ink{ fill:#33415c; }
 .mv .mv-doc-accent{ fill:var(--accent-ink); }
@@ -695,7 +716,7 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
   .pricing{ grid-template-columns:minmax(0,430px); }
   .footer-grid{ grid-template-columns:1fr; gap:26px; }
 }
-@media (max-width: 1120px) and (min-width: 861px){
+@media (max-width: 1299px) and (min-width: 861px){
   /* nav complète + CTA ne tiennent pas ensemble : le CTA d'en-tête s'efface,
      celui de l'accroche reste à un défilement de distance */
   .header-bar > .btn--soon{ display:none; }
@@ -706,6 +727,11 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
 @media (max-width: 620px){
   .grid-3, .steps, .features{ grid-template-columns:1fr; }
   .header-bar{ gap:12px; }
+}
+@media (max-width: 520px){
+  /* trop étroit pour marque + langues + CTA : le CTA d'en-tête s'efface,
+     celui de l'accroche est visible juste en dessous */
+  .header-bar > .btn--soon{ display:none; }
 }
 
 /* ---------- IMPRESSION / DIVERS ---------- */
@@ -775,8 +801,15 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow" data-i18n="hero.eyebrow">Software de informes para veterinaria</p>
-      <h1 id="hero-title" data-i18n="hero.title">El informe de imagen, listo antes de quitarte los guantes.</h1>
-      <p class="lead" data-i18n="hero.sub">Ecografía abdominal, ecocardiografía, radiografía o TAC: marca los hallazgos durante la exploración y BRYlog Pro redacta por ti un informe Word profesional. Se acabó volver a escribirlo todo por la noche.</p>
+      <h1 id="hero-title" data-i18n="hero.title">El informe se escribe durante la exploración. Tú, a la medicina.</h1>
+      <p class="lead" data-i18n="hero.sub">Marca los hallazgos durante la exploración y BRYlog Pro redacta por ti un informe Word profesional. Se acabó volver a escribirlo todo por la noche.</p>
+      <!-- Modalités d'imagerie : pastilles scannables plutôt qu'une énumération en prose -->
+      <ul class="hero-mods" aria-label="Modalidades de imagen compatibles" data-i18n-aria="hero.modsAria">
+        <li data-i18n="hero.mod1">Ecografía abdominal</li>
+        <li data-i18n="hero.mod2">Ecocardiografía</li>
+        <li data-i18n="hero.mod3">Radiografía</li>
+        <li data-i18n="hero.mod4">TAC</li>
+      </ul>
       <div class="btn-row">
         <button type="button" class="btn btn--primary btn--soon js-soon">
           <span class="dot" aria-hidden="true"></span>
@@ -1382,14 +1415,23 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
       en: "Reporting software for veterinarians"
     },
     "hero.title": {
-      es: "El informe de imagen, listo antes de quitarte los guantes.",
-      fr: "Le compte rendu d'imagerie, terminé avant d'avoir retiré les gants.",
-      en: "Your imaging report, finished before you take off your gloves."
+      es: "El informe se escribe durante la exploración. Tú, a la medicina.",
+      fr: "Le compte rendu s'écrit pendant l'examen. À vous la médecine.",
+      en: "The report writes itself during the exam. You focus on medicine."
     },
     "hero.sub": {
-      es: "Ecografía abdominal, ecocardiografía, radiografía o TAC: marca los hallazgos durante la exploración y BRYlog Pro redacta por ti un informe Word profesional. Se acabó volver a escribirlo todo por la noche.",
-      fr: "Échographie abdominale, échocardiographie, radiographie ou scanner : cochez vos observations pendant l'examen, BRYlog Pro rédige pour vous un compte rendu Word professionnel. Fini la rédaction le soir, de mémoire.",
-      en: "Abdominal ultrasound, echocardiography, X-rays or CT: tick your findings as you scan and BRYlog Pro writes a professional Word report for you. No more typing it all up at night."
+      es: "Marca los hallazgos durante la exploración y BRYlog Pro redacta por ti un informe Word profesional. Se acabó volver a escribirlo todo por la noche.",
+      fr: "Cochez vos observations pendant l'examen : BRYlog Pro rédige pour vous un compte rendu Word professionnel. Fini la rédaction le soir, de mémoire.",
+      en: "Tick your findings as you scan and BRYlog Pro writes a professional Word report for you. No more typing it all up at night."
+    },
+    "hero.mod1": { es: "Ecografía abdominal", fr: "Échographie abdominale", en: "Abdominal ultrasound" },
+    "hero.mod2": { es: "Ecocardiografía",     fr: "Échocardiographie",      en: "Echocardiography" },
+    "hero.mod3": { es: "Radiografía",         fr: "Radiographie",           en: "X-ray" },
+    "hero.mod4": { es: "TAC",                 fr: "Scanner",                en: "CT" },
+    "hero.modsAria": {
+      es: "Modalidades de imagen compatibles",
+      fr: "Modalités d'imagerie prises en charge",
+      en: "Supported imaging modalities"
     },
     "hero.note": {
       es: "Windows · 30 días de prueba gratis · sin tarjeta",
@@ -1854,20 +1896,37 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
   if (mv){
     mv.setAttribute("aria-label", I18N["mv.aria"][current]);
 
+    /* L'animation dure ~6 s ; elle REJOUE EN BOUCLE toute seule après une
+       courte pause, tant que le visuel est à l'écran et l'onglet actif.
+       Un clic (ou Entrée/Espace) la relance immédiatement. */
+    var MV_LOOP_MS = 9500;   /* durée animation + pause avant la reprise */
+    var mvTimer = null, mvVisible = true;
+
+    var scheduleMv = function(){
+      if (REDUCED) return;   /* pas de boucle si mouvement réduit */
+      if (mvTimer) clearTimeout(mvTimer);
+      mvTimer = window.setTimeout(function(){
+        mvTimer = null;
+        if (mvVisible && !document.hidden){ playMv(); }
+        else { scheduleMv(); } /* hors écran ou onglet caché : on repassera */
+      }, MV_LOOP_MS);
+    };
+
     var playMv = function(){
       mv.classList.remove("play");
       void mv.getBoundingClientRect(); /* force le recalcul : l'animation repart de zéro */
       mv.classList.add("play");
+      scheduleMv();
     };
 
     if ("IntersectionObserver" in window){
       var mvSeen = false;
-      new IntersectionObserver(function(entries, obs){
+      new IntersectionObserver(function(entries){
         entries.forEach(function(en){
+          mvVisible = en.isIntersecting;
           if (en.isIntersecting && !mvSeen){
             mvSeen = true;
             playMv();
-            obs.disconnect();
           }
         });
       }, { threshold: 0.35 }).observe(mv);

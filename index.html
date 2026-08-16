@@ -316,60 +316,8 @@ section:not(.sec--dark){
 @keyframes lm-trace{ to{ stroke-dashoffset:0; } }
 @keyframes lm-fade{  to{ opacity:1; } }
 
-/* ---------- LOGO : inclinaison 3D au survol ----------
-   Le monogramme pivote légèrement en profondeur (transform seul) et
-   le serpent se retrace (stroke-dashoffset). Sobre, instrument de précision. */
-.brand .logo-mark, .footer-brand .logo-mark{
-  transition:transform .5s cubic-bezier(.2,.7,.2,1);
-}
-.brand:hover .logo-mark, .brand:focus-visible .logo-mark{
-  transform:perspective(320px) rotateY(16deg) rotateX(-6deg) scale(1.06);
-}
-.footer-brand:hover .logo-mark{
-  transform:perspective(480px) rotateY(-14deg) rotateX(5deg) scale(1.04);
-}
-@media (prefers-reduced-motion: no-preference){
-  .brand:hover .lm-snake, .footer-brand:hover .lm-snake{
-    stroke-dasharray:1;
-    animation:lm-resnake 1.1s cubic-bezier(.5,0,.3,1);
-  }
-}
-@keyframes lm-resnake{ from{ stroke-dashoffset:1; } to{ stroke-dashoffset:0; } }
-@media (prefers-reduced-motion: reduce){
-  .brand .logo-mark, .footer-brand .logo-mark{ transition:none; }
-}
-
 /* ---------- ACCROCHE (hero) ---------- */
-.hero{ padding-top:clamp(56px, 8vw, 110px); overflow:hidden; }
-
-/* Filigrane : monogramme monumental gravé au trait, en profondeur */
-.hero-emblem{
-  position:absolute; z-index:0; pointer-events:none;
-  top:50%; right:max(-90px, -6vw);
-  width:clamp(300px, 36vw, 560px);
-  transform:translateY(-52%);
-}
-.hero-emblem svg{ width:100%; height:auto; }
-.hero-emblem path{
-  fill:none; stroke:#5f9bf8; stroke-linecap:round; opacity:.09;
-}
-.hero-emblem .he-snake{ opacity:.15; }
-.hero-grid{ position:relative; z-index:1; }
-@media (prefers-reduced-motion: no-preference){
-  /* se dessine au chargement, trait après trait… */
-  html.js .hero-emblem path{
-    stroke-dasharray:1; stroke-dashoffset:1;
-    animation:lm-trace 1.4s cubic-bezier(.5,0,.3,1) forwards;
-    animation-delay:calc(.3s + var(--i) * .14s);
-  }
-  /* …puis dérive très lentement en profondeur */
-  .hero-emblem svg{ animation:emblem-drift 26s ease-in-out infinite alternate; }
-}
-@keyframes emblem-drift{
-  from{ transform:perspective(900px) rotateY(-9deg) rotateX(3deg); }
-  to{   transform:perspective(900px) rotateY(9deg)  rotateX(-4deg); }
-}
-@media (max-width: 700px){ .hero-emblem{ display:none; } }
+.hero{ padding-top:clamp(56px, 8vw, 110px); }
 .hero-grid{
   display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1.15fr);
   gap:clamp(36px, 5vw, 72px); align-items:center;
@@ -850,23 +798,6 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
 
 <!-- ===== ACCROCHE ===== -->
 <section class="hero fx-host" aria-labelledby="hero-title">
-
-  <!-- Filigrane : monogramme B/L monumental gravé au trait, qui se dessine
-       au chargement puis dérive lentement en profondeur. Purement décoratif
-       (aria-hidden), DERRIÈRE le contenu, jamais au-dessus du texte. -->
-  <div class="hero-emblem" aria-hidden="true">
-    <svg viewBox="0 0 200 240" focusable="false">
-      <path style="--i:0" pathLength="1" d="M103 16v48"  stroke-width="22"/>
-      <path style="--i:1" pathLength="1" d="M44 50v114"  stroke-width="24"/>
-      <path style="--i:2" pathLength="1" d="M34 62h66"   stroke-width="24"/>
-      <path style="--i:3" pathLength="1" d="M44 120h44"  stroke-width="22"/>
-      <path style="--i:4" pathLength="1" d="M104 62c52-2 52 58-6 58" stroke-width="23"/>
-      <path style="--i:5" pathLength="1" d="M98 120c80-6 86 84-6 86l-26-6" stroke-width="24"/>
-      <path style="--i:6" class="he-snake" pathLength="1" stroke-width="16"
-            d="M78 96c30-8 46 8 39 24s-27 18-29 32c-2 16 14 20 15 34 1 18-21 30-42 24-19-6-21-27-3-32 14-4 25 7 39 2"/>
-    </svg>
-  </div>
-
   <div class="wrap hero-grid">
     <div class="hero-copy">
       <p class="eyebrow" data-i18n="hero.eyebrow">Software de informes para veterinaria</p>
@@ -1381,7 +1312,7 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
         <path class="lm-fill" d="M104 136c24-8 42 8 39 27-3 20-25 27-39 18Z"/>
         <path class="lm-gap"   stroke-width="28"
               d="M78 96c30-8 46 8 39 24s-27 18-29 32c-2 16 14 20 15 34 1 18-21 30-42 24-19-6-21-27-3-32 14-4 25 7 39 2"/>
-        <path class="lm-snake" pathLength="1" stroke-width="16"
+        <path class="lm-snake" stroke-width="16"
               d="M78 96c30-8 46 8 39 24s-27 18-29 32c-2 16 14 20 15 34 1 18-21 30-42 24-19-6-21-27-3-32 14-4 25 7 39 2"/>
         <path class="lm-fill" d="M84 104c-22 4-37-4-31-14 6-10 27-11 35-3 6 6 4 14-4 17Z"/>
         <path class="lm-eye"  d="M76 93c-10 3-17 0-14-4 3-4 12-4 16 0Z"/>

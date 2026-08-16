@@ -227,6 +227,8 @@ section:not(.sec--dark){
   background:var(--metal); color:#fff;
 }
 .lang-switch button:not([aria-pressed="true"]):hover{ color:#fff; }
+/* anneau de focus à l'intérieur du bouton : ne se confond pas avec l'état actif */
+.lang-switch button:focus-visible{ outline-offset:-3px; }
 
 /* ---------- BOUTONS ---------- */
 .btn{
@@ -1806,14 +1808,25 @@ html.js .faq-item.open .faq-panel-inner{ opacity:1; transform:none; }
   var current = detectLang();
   applyTexts(current);
 
+  var langTimer = null;
   function setLang(lang){
-    if (lang === current) return;
+    if (LANGS.indexOf(lang) < 0 || lang === current) return;
     current = lang;
+    /* le choix s'affiche immédiatement sur les boutons : il ne peut jamais
+       sembler « effacé » pendant la transition des textes */
+    document.querySelectorAll(".lang-switch button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+    });
     if (REDUCED){ applyTexts(lang); return; }
-    /* transition douce : les textes s'effacent, changent, réapparaissent */
+    /* transition douce : les textes s'effacent, changent, réapparaissent.
+       Un SEUL timer : des clics rapprochés remplacent le précédent, et le
+       timer applique toujours la dernière langue choisie (jamais une valeur
+       intermédiaire périmée). */
+    if (langTimer) clearTimeout(langTimer);
     document.documentElement.classList.add("lang-out");
-    window.setTimeout(function(){
-      applyTexts(lang);
+    langTimer = window.setTimeout(function(){
+      langTimer = null;
+      applyTexts(current);
       requestAnimationFrame(function(){
         document.documentElement.classList.remove("lang-out");
       });
